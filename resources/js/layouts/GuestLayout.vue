@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Layout } from "@/layouts";
+import {RocketLaunchIcon} from "@heroicons/vue/24/outline";
 
 const props = defineProps<{
   title: string
@@ -12,7 +13,7 @@ const props = defineProps<{
       <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div class="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <img class="h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+            <RocketLaunchIcon class="h-10 w-auto text-indigo-800 dark:text-indigo-400" />
             <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">
               {{ title}}
             </h2>

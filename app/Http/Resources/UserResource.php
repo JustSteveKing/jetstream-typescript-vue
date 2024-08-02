@@ -23,6 +23,11 @@ final class UserResource extends JsonResource
             'team' => new TeamResource(
                 resource: $this->resource->currentTeam,
             ),
+            'teams' => TeamResource::collection(
+                resource: $this->whenLoaded(
+                    relationship: 'teams',
+                ),
+            ),
         ];
     }
 }

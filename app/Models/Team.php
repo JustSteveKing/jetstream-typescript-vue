@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Observers\TeamObserver;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +22,7 @@ use Laravel\Jetstream\Team as JetstreamTeam;
  * @property User $owner
  * @property Collection<User> $users
  */
+#[ObservedBy(classes: TeamObserver::class)]
 final class Team extends JetstreamTeam
 {
     use HasFactory;

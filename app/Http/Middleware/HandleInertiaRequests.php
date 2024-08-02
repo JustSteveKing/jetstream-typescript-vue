@@ -22,7 +22,7 @@ final class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $this->auth->check() ? new UserResource(
-                    resource: $this->auth->user()?->load(['currentTeam']),
+                    resource: $this->auth->user()?->load(['currentTeam', 'teams']),
                 ) : null,
             ],
             'route' => [

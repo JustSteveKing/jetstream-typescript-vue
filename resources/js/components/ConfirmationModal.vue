@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Modal from './Modal.vue';
 
 const emit = defineEmits(['close']);

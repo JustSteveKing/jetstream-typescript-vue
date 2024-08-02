@@ -13,6 +13,7 @@ export type User = {
   avatar?: string
   verified: boolean
   team?: Team
+  teams: Team[]
 };
 
 export type Route = {

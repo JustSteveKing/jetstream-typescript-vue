@@ -9,5 +9,7 @@ Route::as('pages:')->group(static function (): void {
 
     Route::middleware(['auth:sanctum', 'verified', config('jetstream.auth_session')])->group(static function (): void {
         Route::inertia(uri: '/', component: 'Index')->name('home');
+
+        Route::inertia('example', 'Example')->name('example');
     });
 });

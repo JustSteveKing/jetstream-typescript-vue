@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import {
   Cloud,
-  CreditCard,
+  Briefcase,
   Github,
-  Keyboard,
-  LifeBuoy,
   LogOut,
   Plus,
   Settings,
   User,
-  Users,
 } from 'lucide-vue-next'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -26,8 +23,6 @@ import {Link, usePage} from "@inertiajs/vue3";
 import {computed} from "vue";
 
 const page = usePage();
-
-const user = computed(async () => page.props.auth.user);
 </script>
 
 <template>
@@ -35,14 +30,14 @@ const user = computed(async () => page.props.auth.user);
     <DropdownMenuTrigger as-child>
       <Button variant="ghost">
         <Avatar>
-          <AvatarImage :src="user.avatar" alt="@radix-vue" />
+          <AvatarImage :src="page.props.auth.user.avatar ?? 'https://github.com/octocat.png'" alt="@radix-vue" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent class="w-56">
       <DropdownMenuLabel>
-        {{ user.name}}
+        {{ page.props.auth.user.name }}
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
@@ -55,15 +50,12 @@ const user = computed(async () => page.props.auth.user);
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
       <DropdownMenuItem>
-        <Github class="mr-2 h-4 w-4" />
-        <span>GitHub</span>
+        <Briefcase class="mr-2 h-4 w-4" />
+        <Link :href="route('teams.show', page.props.auth.user.team.id)" class="w-full text-left">Manage Team</Link>
       </DropdownMenuItem>
+      <DropdownMenuSeparator />
       <DropdownMenuItem>
-        <LifeBuoy class="mr-2 h-4 w-4" />
-        <span>Support</span>
-      </DropdownMenuItem>
-      <DropdownMenuItem disabled>
-        <Cloud class="mr-2 h-4 w-4" />
+        <Settings class="mr-2 h-4 w-4" />
         <Link :href="route('api-tokens.index')" class="w-full text-left">API</Link>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
