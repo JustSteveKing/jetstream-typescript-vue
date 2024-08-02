@@ -162,7 +162,7 @@ const sidebarOpen = ref(false)
           </div>
         </div>
 
-        <main class="py-10">
+        <main class="py-10 bg-background">
           <slot />
         </main>
       </div>

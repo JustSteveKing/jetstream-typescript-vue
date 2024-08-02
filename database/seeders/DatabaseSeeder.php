@@ -14,6 +14,7 @@ final class DatabaseSeeder extends Seeder
         User::factory()->withPersonalTeam()->create([
             'name' => 'Steve McDougall',
             'email' => 'juststevemcd@gmail.com',
+            'profile_photo_path' => 'https://github.com/juststeveking.png',
         ]);
     }
 }

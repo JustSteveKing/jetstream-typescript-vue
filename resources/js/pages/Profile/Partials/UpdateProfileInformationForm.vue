@@ -1,17 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
-import { Link, router, useForm } from '@inertiajs/vue3';
-import ActionMessage from '@/components/ActionMessage.vue';
-import FormSection from '@/components/FormSection.vue';
-import InputError from '@/components/InputError.vue';
-import InputLabel from '@/components/InputLabel.vue';
-import PrimaryButton from '@/components/PrimaryButton.vue';
-import SecondaryButton from '@/components/SecondaryButton.vue';
-import TextInput from '@/components/TextInput.vue';
+import { router, useForm } from '@inertiajs/vue3';
+import {User} from "@/types";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card'
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {Button} from "@/components/ui/button";
 
-const props = defineProps({
-    user: Object,
-});
+const props = defineProps<{
+  user: User
+}>();
 
 const form = useForm({
     _method: 'PUT',
@@ -76,115 +78,77 @@ const clearPhotoFileInput = () => {
 </script>
 
 <template>
-    <FormSection @submitted="updateProfileInformation">
-        <template #title>
-            Profile Information
-        </template>
+  <section class="md:grid md:grid-cols-3 md:gap-6 flex items-center">
+    <div class="md:col-span-1 flex justify-between">
+      <div class="px-4 sm:px-0">
+        <h3 class="text-lg font-medium">
+          Profile Information
+        </h3>
 
-        <template #description>
-            Update your account's profile information and email address.
-        </template>
-
-        <template #form>
-            <!-- Profile Photo -->
-            <div v-if="$page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
-                <!-- Profile Photo File Input -->
-                <input
-                    id="photo"
-                    ref="photoInput"
-                    type="file"
-                    class="hidden"
-                    @change="updatePhotoPreview"
-                >
-
-                <InputLabel for="photo" value="Photo" />
-
-                <!-- Current Profile Photo -->
-                <div v-show="! photoPreview" class="mt-2">
-                    <img :src="user.profile_photo_url" :alt="user.name" class="rounded-full h-20 w-20 object-cover">
-                </div>
-
-                <!-- New Profile Photo Preview -->
-                <div v-show="photoPreview" class="mt-2">
-                    <span
-                        class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
-                        :style="'background-image: url(\'' + photoPreview + '\');'"
-                    />
-                </div>
-
-                <SecondaryButton class="mt-2 me-2" type="button" @click.prevent="selectNewPhoto">
-                    Select A New Photo
-                </SecondaryButton>
-
-                <SecondaryButton
-                    v-if="user.profile_photo_path"
-                    type="button"
-                    class="mt-2"
-                    @click.prevent="deletePhoto"
-                >
-                    Remove Photo
-                </SecondaryButton>
-
-                <InputError :message="form.errors.photo" class="mt-2" />
+        <p class="mt-1 text-sm">
+          Update your account's profile information and email address.
+        </p>
+      </div>
+    </div>
+    <Card class="mt-5 md:mt-0 md:col-span-2">
+      <form @submit.prevent="updateProfileInformation">
+        <CardContent>
+          <div class="py-6">
+            <Label for="name" class="block text-sm font-medium leading-6">
+              Name
+            </Label>
+            <div class="mt-2">
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                autocomplete="off"
+                placeholder="Jon Snow"
+                required
+                autofocus
+                v-model="form.name"
+                class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-ring placeholder:text-foreground focus:ring-2 focus:ring-inset focus:ring-ring sm:text-sm sm:leading-6"
+              />
+              <template v-if="form.errors.name">
+                <p class="mt-2 text-md text-destructive">
+                  {{ form.errors.name }}
+                </p>
+              </template>
             </div>
-
-            <!-- Name -->
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="name"
-                />
-                <InputError :message="form.errors.name" class="mt-2" />
+          </div>
+          <div>
+            <Label for="email" class="block text-sm font-medium leading-6">
+              Email Address
+            </Label>
+            <div class="mt-2">
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="off"
+                placeholder="jon.snow@thewall.io"
+                required
+                autofocus
+                v-model="form.email"
+                class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-ring placeholder:text-foreground focus:ring-2 focus:ring-inset focus:ring-ring sm:text-sm sm:leading-6"
+              />
+              <template v-if="form.errors.email">
+                <p class="mt-2 text-md text-destructive">
+                  {{ form.errors.email }}
+                </p>
+              </template>
             </div>
-
-            <!-- Email -->
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="username"
-                />
-                <InputError :message="form.errors.email" class="mt-2" />
-
-                <div v-if="$page.props.jetstream.hasEmailVerification && user.email_verified_at === null">
-                    <p class="text-sm mt-2 dark:text-white">
-                        Your email address is unverified.
-
-                        <Link
-                            :href="route('verification.send')"
-                            method="post"
-                            as="button"
-                            class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                            @click.prevent="sendEmailVerification"
-                        >
-                            Click here to re-send the verification email.
-                        </Link>
-                    </p>
-
-                    <div v-show="verificationLinkSent" class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                        A new verification link has been sent to your email address.
-                    </div>
-                </div>
-            </div>
-        </template>
-
-        <template #actions>
-            <ActionMessage :on="form.recentlySuccessful" class="me-3">
-                Saved.
-            </ActionMessage>
-
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
-            </PrimaryButton>
-        </template>
-    </FormSection>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button
+            type="submit"
+            :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
+            class="flex w-full justify-center rounded-md bg-ring px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-ring/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >Save
+          </Button>
+        </CardFooter>
+      </form>
+    </Card>
+  </section>
 </template>
