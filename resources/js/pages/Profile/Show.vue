@@ -7,15 +7,14 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import DeleteUserForm from '@/pages/Profile/Partials/DeleteUserForm.vue';
 import LogoutOtherBrowserSessionsForm from '@/pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue';
-import SectionBorder from '@/components/SectionBorder.vue';
 import TwoFactorAuthenticationForm from '@/pages/Profile/Partials/TwoFactorAuthenticationForm.vue';
 import UpdatePasswordForm from '@/pages/Profile/Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from '@/pages/Profile/Partials/UpdateProfileInformationForm.vue';
 
-const props = defineProps<{
+defineProps({
   confirmsTwoFactorAuthentication: Boolean,
   sessions: Array,
-}>();
+});
 </script>
 
 <template>

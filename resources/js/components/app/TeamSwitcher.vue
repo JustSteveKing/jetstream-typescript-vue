@@ -5,7 +5,7 @@ import {
   ChevronUpDownIcon as CaretSortIcon,
   PlusCircleIcon as PlusCircledIcon,
 } from "@heroicons/vue/24/outline";
-import { router } from '@inertiajs/vue3'
+import {router, useForm} from '@inertiajs/vue3'
 import { cn } from '@/lib/utils'
 import {
   Avatar,
@@ -31,13 +31,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import {usePage} from "@inertiajs/vue3";
 
 const page = usePage();
@@ -46,8 +39,24 @@ const open = ref(false)
 const showNewTeamDialog = ref(false)
 const selectedTeam = page.props.auth.user.team
 
-const switchTeam = async (teamId: string) => {
+const form = useForm({
+  name: '',
+});
 
+const createTeam = async () => {
+  form.post(route('teams.store'), {
+    errorBag: 'createTeam',
+    preserveScroll: true,
+  });
+};
+
+const switchTeam = async (teamId: string) => {
+  const switchTeamForm = useForm({
+    team_id: teamId,
+  });
+  switchTeamForm.put(route('current-team.update'), {
+    onSuccess: () => window.location.reload(),
+  });
 };
 
 </script>
@@ -84,9 +93,7 @@ const switchTeam = async (teamId: string) => {
                 :key="team.id"
                 :value="team.name"
                 class="text-sm"
-                @select="router.visit(
-                  route('teams.show', team.id),
-                )"
+                @select="switchTeam(team.id)"
               >
                 <Avatar class="mr-2 h-5 w-5">
                   <AvatarImage
@@ -131,47 +138,27 @@ const switchTeam = async (teamId: string) => {
       <DialogHeader>
         <DialogTitle>Create team</DialogTitle>
         <DialogDescription>
-          Add a new team to manage products and customers.
+          Quickly create a new team to manage.
         </DialogDescription>
       </DialogHeader>
-      <div>
-        <div class="space-y-4 py-2 pb-4">
-          <div class="space-y-2">
-            <Label for="name">Team name</Label>
-            <Input id="name" placeholder="Acme Inc." />
-          </div>
-          <div class="space-y-2">
-            <Label for="plan">Subscription plan</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a plan" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="free">
-                  <span class="font-medium">Free</span> -
-                  <span class="text-muted-foreground">
-                    Trial for two weeks
-                  </span>
-                </SelectItem>
-                <SelectItem value="pro">
-                  <span class="font-medium">Pro</span> -
-                  <span class="text-muted-foreground">
-                    $9/month per user
-                  </span>
-                </SelectItem>
-              </SelectContent>
-            </Select>
+      <form @submit.prevent="createTeam">
+        <div>
+          <div class="space-y-4 py-2 pb-4">
+            <div class="space-y-2">
+              <Label for="name">Team name</Label>
+              <Input v-model="form.name" id="name" type="text" name="name" placeholder="Kings Landing Inc." />
+            </div>
           </div>
         </div>
-      </div>
-      <DialogFooter>
-        <Button variant="outline" @click="showNewTeamDialog = false">
-          Cancel
-        </Button>
-        <Button type="submit">
-          Continue
-        </Button>
-      </DialogFooter>
+        <DialogFooter>
+          <Button variant="outline" @click="showNewTeamDialog = false">
+            Cancel
+          </Button>
+          <Button type="submit">
+            Continue
+          </Button>
+        </DialogFooter>
+      </form>
     </DialogContent>
   </Dialog>
 </template>

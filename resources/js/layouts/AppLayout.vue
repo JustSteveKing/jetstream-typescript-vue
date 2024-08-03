@@ -139,19 +139,19 @@ const page = usePage();
             </DropdownMenuLabel>
             <DropdownMenuSeparator/>
             <DropdownMenuItem>
-              <Link :href="route('profile.show')">Account</Link>
+              <Link class="w-full" :href="route('profile.show')">Account</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator/>
             <DropdownMenuItem>
-              <Link :href="route('teams.show', page.props.auth.user.team.id)">Manage Team</Link>
+              <Link class="w-full" :href="route('teams.show', page.props.auth.user.team.id)">Manage Team</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator/>
             <DropdownMenuItem>
-              <Link :href="route('api-tokens.index')">API Tokensx</Link>
+              <Link class="w-full" :href="route('api-tokens.index')">API Tokens</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator/>
             <DropdownMenuItem>
-              <Link :href="route('logout')" method="POST">Logout</Link>
+              <Link class="w-full" :href="route('logout')" method="POST">Logout</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
